@@ -7,7 +7,7 @@ import (
 )
 
 func Handle() {
-	logger := TestApacheLogger{}
+	logger := SimpleLogger{}
 	bob := petowner.Person{
 		Name: "Fluffy",
 		Repo: storage.NoSQL{},

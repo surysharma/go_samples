@@ -2,9 +2,9 @@ package infra
 
 import "log"
 
-type TestApacheLogger struct{}
+type SimpleLogger struct{}
 
-func (a TestApacheLogger) AddLog(stm string) {
+func (a SimpleLogger) AddLog(stm string) {
 	log.Printf("Item added %v...", stm)
 
 }
