@@ -2,8 +2,8 @@ package infra
 
 import (
 	"fmt"
-	"github.com/learning-go-book/circular_dependency_example/pkg/domain/petowner"
-	"github.com/learning-go-book/circular_dependency_example/pkg/storage"
+	"github.com/circular_dependency_example/pkg/domain/petowner"
+	"github.com/circular_dependency_example/pkg/storage"
 )
 
 func Handle() {

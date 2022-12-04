@@ -1,7 +1,7 @@
 package petowner
 
 import (
-	"github.com/learning-go-book/circular_dependency_example/pkg/storage"
+	"github.com/circular_dependency_example/pkg/storage"
 )
 
 type Person struct {

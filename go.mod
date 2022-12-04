@@ -1,3 +1,3 @@
-module "github.com/learning-go-book/circular_dependency_example"
+module "github.com/circular_dependency_example"
 
-go 1.15
+go 1.17
