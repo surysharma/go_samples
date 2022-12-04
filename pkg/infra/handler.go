@@ -11,6 +11,8 @@ func Handle() {
 	bob := petowner.Person{
 		Name: "Fluffy",
 		Repo: storage.NoSQL{},
+		//Uncommenting the below line will cause import cycle issue
+		//Logger: SimpleLogger{},
 	}
 	fmt.Println(bob.Pet())
 	logger.AddLog(bob.Pet())
