@@ -1,65 +1,70 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 )
 
-func closeFile(f *os.File) {
-	err := f.Close()
-	if err != nil {
-		log.Fatal("Unable to close the file", err)
+type ColorType int
+
+const (
+	BLUE ColorType = iota
+	RED
+	GREEN
+	ORANGE
+)
+
+type Product struct {
+	Name        string
+	Description string
+	Colour      ColorType
+}
+
+type FilterStrategy interface {
+	isPresent(p *Product) bool
+}
+
+type ColourFilter struct {
+	colour ColorType
+}
+
+func (cf *ColourFilter) isPresent(p *Product) bool {
+	return cf.colour == p.Colour
+
+}
+
+type NameFilter struct {
+	Name string
+}
+
+func (cf *NameFilter) isPresent(p *Product) bool {
+	return cf.Name == p.Name
+
+}
+
+func filter(filter FilterStrategy, p []Product) {
+	for _, v := range p {
+
+		if filter.isPresent(&v) {
+			fmt.Println("Product name is", v.Name, ",Description is", v.Description)
+		}
 	}
 }
 
 func main() {
-	if len(os.Args) != 3 {
-		fmt.Println("Usage: filecmp <file1> <file2>")
-		os.Exit(1)
-	}
 
-	file1 := os.Args[1]
-	file2 := os.Args[2]
+	products := make([]Product, 0, 10)
 
-	f1, err := os.Open(file1)
-	if err != nil {
-		fmt.Println("Error opening", file1, ":", err)
-		os.Exit(1)
-	}
-	defer closeFile(f1)
+	products = append(products, Product{Name: "Apple", Colour: RED, Description: "Gala Apples"})
+	products = append(products, Product{Name: "Banana", Colour: GREEN, Description: "Green Carribiean Bananas"})
+	products = append(products, Product{Name: "Orange", Colour: ORANGE, Description: "Samartian Oranges"})
+	products = append(products, Product{Name: "Apple", Colour: RED, Description: "Indian Apples"})
+	products = append(products, Product{Name: "Banana", Colour: GREEN, Description: "Indian Bananas"})
+	products = append(products, Product{Name: "Orange", Colour: ORANGE, Description: "Jamican Oranges"})
 
-	f2, err := os.Open(file2)
-	if err != nil {
-		fmt.Println("Error opening", file2, ":", err)
-		os.Exit(1)
-	}
-	defer closeFile(f2)
+	colorFilter := ColourFilter{GREEN}
+	filter(&colorFilter, products)
 
-	scanner1 := bufio.NewScanner(f1)
-	scanner2 := bufio.NewScanner(f2)
-	line := 1
-	for scanner1.Scan() && scanner2.Scan() {
-		if scanner1.Text() != scanner2.Text() {
-			fmt.Printf("Line %d:\n< %s\n> %s\n", line, scanner1.Text(), scanner2.Text())
-			line++
-		}
-	}
+	nameFilter := NameFilter{Name: "Orange"}
+	filter(&nameFilter, products)
 
-	if scanner1.Err() != nil {
-		fmt.Println("Error reading", file1, ":", scanner1.Err())
-		os.Exit(1)
-	}
-
-	if scanner2.Err() != nil {
-		fmt.Println("Error reading", file2, ":", scanner2.Err())
-		os.Exit(1)
-	}
-
-	if line > 1 {
-		fmt.Println("Files are different")
-	} else {
-		fmt.Println("Files are the same")
-	}
 }
